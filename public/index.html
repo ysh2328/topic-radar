@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>지금떡밥은?</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <h1>지금떡밥은?</h1>
+      </header>
+
+      <section class="source-board">
+        <section class="source-column local-column">
+          <div id="primaryLabel" class="source-label">미주갤</div>
+          <section class="cloud-stage" aria-label="현재 화력">
+            <div id="wordCloud" class="word-cloud" aria-live="polite">
+              <div class="loading-card">loading</div>
+            </div>
+          </section>
+        </section>
+
+        <section id="secondaryColumn" class="source-column secondary-column" hidden>
+          <div id="secondaryLabel" class="source-label">4chan /biz/</div>
+          <section class="cloud-stage" aria-label="4chan 화력">
+            <div id="secondaryCloud" class="word-cloud" aria-live="polite">
+              <div class="loading-card">loading</div>
+            </div>
+          </section>
+        </section>
+      </section>
+
+      <section id="detailDrawer" class="focus-drawer" hidden>
+        <div class="focus-title">포커스</div>
+        <section class="panel selected-panel">
+          <div class="panel-head focus-head">
+            <div>
+              <h2 id="selectedTerm">-</h2>
+              <span id="selectedMeta">단어를 누르세요</span>
+            </div>
+            <button id="detailClose" type="button" class="detail-close" aria-label="닫기">×</button>
+          </div>
+          <div id="relatedTerms" class="related-terms"></div>
+          <div id="selectedPosts" class="post-list"></div>
+        </section>
+      </section>
+
+      <section class="rising-section" aria-label="급상승">
+        <div class="section-title">급상승</div>
+        <div class="rising-board">
+          <section class="panel rising-panel">
+            <div id="primaryRisingLabel" class="rising-source-label">미주갤</div>
+            <div id="primaryRisingList" class="rank-list rising-list">
+              <div class="empty-note">loading</div>
+            </div>
+          </section>
+          <section id="secondaryRisingColumn" class="panel rising-panel" hidden>
+            <div id="secondaryRisingLabel" class="rising-source-label">4chan</div>
+            <div id="secondaryRisingList" class="rank-list rising-list">
+              <div class="empty-note">loading</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div class="sr-status" aria-live="polite">
+        <span id="statusText">loading</span>
+        <span id="updatedAt">-</span>
+      </div>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

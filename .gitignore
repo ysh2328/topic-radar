@@ -1,0 +1,9 @@
+.runtime/
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.zip
+gemini/
+gemini-v2/
+wordpress-plugin/old-topic-radar/
