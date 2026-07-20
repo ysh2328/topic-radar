@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Topic Radar
  * Description: Public community trend radar shortcode and REST endpoint.
- * Version: 0.1.3
+ * Version: 0.1.4
  * Author: tickerread.com
  */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('TOPIC_RADAR_VERSION', '0.1.3');
+define('TOPIC_RADAR_VERSION', '0.1.4');
 
 function topic_radar_sources() {
     return array(
@@ -36,6 +36,17 @@ function topic_radar_sources() {
             'refreshMs' => 15 * 60 * 1000,
             'href' => 'https://gall.dcinside.com/mgallery/board/lists/?id=thesingularity',
         ),
+        'agent_stack' => array(
+            'id' => 'agent_stack',
+            'label' => 'agent_stack',
+            'title' => '에스',
+            'kind' => 'dcinside',
+            'galleryId' => 'agent_stack',
+            'pages' => 3,
+            'nodes' => 50,
+            'refreshMs' => 10 * 60 * 1000,
+            'href' => 'https://m.dcinside.com/board/agent_stack',
+        ),
         'chanbiz' => array(
             'id' => 'chanbiz',
             'label' => '4chan /biz/',
@@ -60,6 +71,9 @@ function topic_radar_initial_source() {
     if (in_array($path, array('/thesingularity', '/singularaty', '/singularity'), true)) {
         return 'thesingularity';
     }
+    if ($path === '/agent_stack') {
+        return 'agent_stack';
+    }
     if (in_array($path, array('/4chan', '/biz', '/chanbiz'), true)) {
         return 'chanbiz';
     }
@@ -69,6 +83,9 @@ function topic_radar_initial_source() {
 function topic_radar_initial_page_title($source_id) {
     if ($source_id === 'thesingularity') {
         return '특갤은지금';
+    }
+    if ($source_id === 'agent_stack') {
+        return '에스는지금';
     }
     if ($source_id === 'chanbiz') {
         return '지금4chan은';
@@ -80,7 +97,7 @@ function topic_radar_shortcode() {
     topic_radar_enqueue_assets();
     $sources = topic_radar_sources();
     $initial_source = topic_radar_initial_source();
-    $primary_label = isset($sources[$initial_source]) ? ($initial_source === 'stockus' ? '미주갤' : ($initial_source === 'thesingularity' ? '특갤' : $sources[$initial_source]['label'])) : '미주갤';
+    $primary_label = isset($sources[$initial_source]) ? ($initial_source === 'stockus' ? '미주갤' : ($initial_source === 'thesingularity' ? '특갤' : ($initial_source === 'agent_stack' ? '에스' : $sources[$initial_source]['label']))) : '미주갤';
     $initial_title = topic_radar_initial_page_title($initial_source);
     ob_start();
     ?>

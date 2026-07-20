@@ -39,6 +39,17 @@ const SOURCES = {
     refreshMs: 15 * 60 * 1000,
     href: "https://gall.dcinside.com/mgallery/board/lists/?id=thesingularity"
   },
+  agent_stack: {
+    id: "agent_stack",
+    label: "agent_stack",
+    title: "에스",
+    kind: "dcinside",
+    galleryId: "agent_stack",
+    pages: 3,
+    nodes: 50,
+    refreshMs: 10 * 60 * 1000,
+    href: "https://m.dcinside.com/board/agent_stack"
+  },
   chanbiz: {
     id: "chanbiz",
     label: "4chan /biz/",
@@ -738,6 +749,7 @@ async function handleStatic(req, res, url) {
     pathname === "/thesingularity" ||
     pathname === "/singularaty" ||
     pathname === "/singularity" ||
+    pathname === "/agent_stack" ||
     pathname === "/4chan" ||
     pathname === "/biz" ||
     pathname === "/chanbiz"
