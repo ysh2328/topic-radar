@@ -27,17 +27,18 @@ let selectedSourceId = null;
 
 const params = new URLSearchParams(location.search);
 const cleanPath = location.pathname.replace(/\/+$/, "");
+const isAiDashboard = cleanPath === "/ai";
 const pathSource =
   ["/thesingularity", "/singularaty", "/singularity"].includes(cleanPath)
     ? "thesingularity"
-    : cleanPath === "/agent_stack"
-      ? "agent_stack"
+    : cleanPath === "/ai_utilize"
+      ? "ai_utilize"
     : ["/4chan", "/biz", "/chanbiz"].includes(cleanPath)
       ? "chanbiz"
       : "";
 const explicitSource = params.get("source") || params.get("id") || pathSource;
-let activeSource = explicitSource || "stockus";
-const secondarySource = explicitSource ? "" : "chanbiz";
+let activeSource = explicitSource || (isAiDashboard ? "thesingularity" : "stockus");
+const secondarySource = explicitSource ? "" : (isAiDashboard ? "ai_utilize" : "chanbiz");
 const DISPLAY_STOPWORDS = new Set([
   "살", "내", "있", "하", "구", "함", "됨", "거", "것", "수", "듯", "중", "전", "후",
   "왜", "뭐", "좀", "더", "말", "나", "너", "저", "걍", "그냥", "진짜", "근데",
@@ -111,8 +112,9 @@ function cloudTier(index) {
 
 function sourceTermLimit(data = radarData) {
   const sourceId = data?.source?.id || activeSource;
-  if (sourceId === "chanbiz") return secondarySource ? 12 : 24;
-  return ["thesingularity", "agent_stack"].includes(sourceId) ? 50 : 12;
+  if (secondarySource) return 12;
+  if (sourceId === "chanbiz") return 24;
+  return ["thesingularity", "ai_utilize"].includes(sourceId) ? 50 : 12;
 }
 
 function sourceLabel(data) {
@@ -120,14 +122,14 @@ function sourceLabel(data) {
   if (sourceId === "stockus") return "미주갤";
   if (sourceId === "chanbiz") return "4chan /biz/";
   if (sourceId === "thesingularity") return "특갤";
-  if (sourceId === "agent_stack") return "에스";
+  if (sourceId === "ai_utilize") return "에활갤";
   return data?.source?.title || data?.source?.label || sourceId || "source";
 }
 
 function pageTitle(data) {
-  if (secondarySource) return "티커는지금";
+  if (secondarySource) return isAiDashboard ? "AI는지금" : "티커는지금";
   if (data?.source?.id === "thesingularity") return "특갤은지금";
-  if (data?.source?.id === "agent_stack") return "에스는지금";
+  if (data?.source?.id === "ai_utilize") return "에활은지금";
   if (data?.source?.id === "chanbiz") return "지금4chan은";
   return "티커는지금";
 }
@@ -148,7 +150,7 @@ function isDisplayTerm(term) {
 
 function isVisibleForSource(term, data = radarData) {
   if (!isDisplayTerm(term)) return false;
-  if (["thesingularity", "agent_stack"].includes(data?.source?.id)) {
+  if (!secondarySource && ["thesingularity", "ai_utilize"].includes(data?.source?.id)) {
     return Number(term?.count || 0) >= 3;
   }
   return true;

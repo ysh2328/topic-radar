@@ -440,8 +440,7 @@ body[data-layout="single"] .rising-board {
   text-decoration: none;
 }
 
-body.page-id-230,
-body.page-id-233 {
+body.topic-radar-page {
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
     linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px),
@@ -451,22 +450,14 @@ body.page-id-233 {
   color: var(--ink) !important;
 }
 
-body.page-id-230 #page,
-body.page-id-233 #page,
-body.page-id-230 #content,
-body.page-id-233 #content,
-body.page-id-230 .site-content,
-body.page-id-233 .site-content,
-body.page-id-230 .ast-container,
-body.page-id-233 .ast-container,
-body.page-id-230 #primary,
-body.page-id-233 #primary,
-body.page-id-230 #main,
-body.page-id-233 #main,
-body.page-id-230 .ast-article-single,
-body.page-id-233 .ast-article-single,
-body.page-id-230 .entry-content,
-body.page-id-233 .entry-content {
+body.topic-radar-page #page,
+body.topic-radar-page #content,
+body.topic-radar-page .site-content,
+body.topic-radar-page .ast-container,
+body.topic-radar-page #primary,
+body.topic-radar-page #main,
+body.topic-radar-page .ast-article-single,
+body.topic-radar-page .entry-content {
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -476,39 +467,29 @@ body.page-id-233 .entry-content {
   width: 100% !important;
 }
 
-body.page-id-230 .site-header,
-body.page-id-233 .site-header,
-body.page-id-230 .entry-header,
-body.page-id-233 .entry-header,
-body.page-id-230 .site-footer,
-body.page-id-233 .site-footer,
-body.page-id-230 #ast-scroll-top,
-body.page-id-233 #ast-scroll-top {
+body.topic-radar-page .site-header,
+body.topic-radar-page .entry-header,
+body.topic-radar-page .site-footer,
+body.topic-radar-page #ast-scroll-top {
   display: none !important;
 }
 
-body.page-id-230 .entry-content .app-shell,
-body.page-id-233 .entry-content .app-shell {
+body.topic-radar-page .entry-content .app-shell {
   color: var(--ink) !important;
   font-family:
     Impact, Haettenschweiler, "Arial Narrow Bold", "Pretendard", "Noto Sans KR",
     system-ui, sans-serif !important;
 }
 
-body.page-id-230 .entry-content .app-shell h1,
-body.page-id-233 .entry-content .app-shell h1,
-body.page-id-230 .entry-content .app-shell h2,
-body.page-id-233 .entry-content .app-shell h2,
-body.page-id-230 .entry-content .app-shell strong,
-body.page-id-233 .entry-content .app-shell strong {
+body.topic-radar-page .entry-content .app-shell h1,
+body.topic-radar-page .entry-content .app-shell h2,
+body.topic-radar-page .entry-content .app-shell strong {
   color: inherit;
   font-family: inherit;
 }
 
-body.page-id-230 .entry-content .app-shell a,
-body.page-id-233 .entry-content .app-shell a,
-body.page-id-230 .entry-content .post-item,
-body.page-id-233 .entry-content .post-item {
+body.topic-radar-page .entry-content .app-shell a,
+body.topic-radar-page .entry-content .post-item {
   text-decoration: none !important;
 }
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Topic Radar
  * Description: Public community trend radar shortcode and REST endpoint.
- * Version: 0.1.4
+ * Version: 0.1.5
  * Author: tickerread.com
  */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('TOPIC_RADAR_VERSION', '0.1.4');
+define('TOPIC_RADAR_VERSION', '0.1.5');
 
 function topic_radar_sources() {
     return array(
@@ -36,16 +36,16 @@ function topic_radar_sources() {
             'refreshMs' => 15 * 60 * 1000,
             'href' => 'https://gall.dcinside.com/mgallery/board/lists/?id=thesingularity',
         ),
-        'agent_stack' => array(
-            'id' => 'agent_stack',
-            'label' => 'agent_stack',
-            'title' => '에스',
+        'ai_utilize' => array(
+            'id' => 'ai_utilize',
+            'label' => 'ai_utilize',
+            'title' => '에활갤',
             'kind' => 'dcinside',
-            'galleryId' => 'agent_stack',
+            'galleryId' => 'ai_utilize',
             'pages' => 3,
             'nodes' => 50,
             'refreshMs' => 10 * 60 * 1000,
-            'href' => 'https://m.dcinside.com/board/agent_stack',
+            'href' => 'https://m.dcinside.com/board/ai_utilize',
         ),
         'chanbiz' => array(
             'id' => 'chanbiz',
@@ -71,8 +71,11 @@ function topic_radar_initial_source() {
     if (in_array($path, array('/thesingularity', '/singularaty', '/singularity'), true)) {
         return 'thesingularity';
     }
-    if ($path === '/agent_stack') {
-        return 'agent_stack';
+    if ($path === '/ai_utilize') {
+        return 'ai_utilize';
+    }
+    if ($path === '/ai') {
+        return 'thesingularity';
     }
     if (in_array($path, array('/4chan', '/biz', '/chanbiz'), true)) {
         return 'chanbiz';
@@ -80,12 +83,28 @@ function topic_radar_initial_source() {
     return topic_radar_default_source();
 }
 
+function topic_radar_initial_secondary_source() {
+    $path = isset($_SERVER['REQUEST_URI']) ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) : '';
+    $path = untrailingslashit((string) $path);
+    if ($path === '/ai') {
+        return 'ai_utilize';
+    }
+    if (in_array($path, array('/thesingularity', '/singularaty', '/singularity', '/ai_utilize', '/4chan', '/biz', '/chanbiz'), true)) {
+        return '';
+    }
+    return 'chanbiz';
+}
+
 function topic_radar_initial_page_title($source_id) {
+    $path = isset($_SERVER['REQUEST_URI']) ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) : '';
+    if (untrailingslashit((string) $path) === '/ai') {
+        return 'AI는지금';
+    }
     if ($source_id === 'thesingularity') {
         return '특갤은지금';
     }
-    if ($source_id === 'agent_stack') {
-        return '에스는지금';
+    if ($source_id === 'ai_utilize') {
+        return '에활은지금';
     }
     if ($source_id === 'chanbiz') {
         return '지금4chan은';
@@ -93,11 +112,29 @@ function topic_radar_initial_page_title($source_id) {
     return '티커는지금';
 }
 
+function topic_radar_source_label($source_id, $sources) {
+    if ($source_id === 'stockus') {
+        return '미주갤';
+    }
+    if ($source_id === 'thesingularity') {
+        return '특갤';
+    }
+    if ($source_id === 'ai_utilize') {
+        return '에활갤';
+    }
+    if ($source_id === 'chanbiz') {
+        return '4chan /biz/';
+    }
+    return isset($sources[$source_id]) ? $sources[$source_id]['label'] : 'source';
+}
+
 function topic_radar_shortcode() {
     topic_radar_enqueue_assets();
     $sources = topic_radar_sources();
     $initial_source = topic_radar_initial_source();
-    $primary_label = isset($sources[$initial_source]) ? ($initial_source === 'stockus' ? '미주갤' : ($initial_source === 'thesingularity' ? '특갤' : ($initial_source === 'agent_stack' ? '에스' : $sources[$initial_source]['label']))) : '미주갤';
+    $secondary_source = topic_radar_initial_secondary_source();
+    $primary_label = topic_radar_source_label($initial_source, $sources);
+    $secondary_label = $secondary_source ? topic_radar_source_label($secondary_source, $sources) : '';
     $initial_title = topic_radar_initial_page_title($initial_source);
     ob_start();
     ?>
@@ -116,9 +153,9 @@ function topic_radar_shortcode() {
           </section>
         </section>
 
-        <section id="secondaryColumn" class="source-column secondary-column" hidden>
-          <div id="secondaryLabel" class="source-label">4chan /biz/</div>
-          <section class="cloud-stage" aria-label="4chan 화력">
+        <section id="secondaryColumn" class="source-column secondary-column"<?php echo $secondary_source ? '' : ' hidden'; ?>>
+          <div id="secondaryLabel" class="source-label"><?php echo esc_html($secondary_label); ?></div>
+          <section class="cloud-stage" aria-label="<?php echo esc_attr($secondary_label . ' 화력'); ?>">
             <div id="secondaryCloud" class="word-cloud" aria-live="polite">
               <div class="loading-card" aria-label="loading"></div>
             </div>
@@ -150,8 +187,8 @@ function topic_radar_shortcode() {
               <div class="empty-note" aria-label="loading"></div>
             </div>
           </section>
-          <section id="secondaryRisingColumn" class="panel rising-panel" hidden>
-            <div id="secondaryRisingLabel" class="rising-source-label">4chan</div>
+          <section id="secondaryRisingColumn" class="panel rising-panel"<?php echo $secondary_source ? '' : ' hidden'; ?>>
+            <div id="secondaryRisingLabel" class="rising-source-label"><?php echo esc_html($secondary_label); ?></div>
             <div id="secondaryRisingList" class="rank-list rising-list">
               <div class="empty-note" aria-label="loading"></div>
             </div>
@@ -168,6 +205,18 @@ function topic_radar_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('topic_radar', 'topic_radar_shortcode');
+
+function topic_radar_page_body_class($classes) {
+    if (!is_singular()) {
+        return $classes;
+    }
+    $post = get_post();
+    if ($post instanceof WP_Post && has_shortcode($post->post_content, 'topic_radar')) {
+        $classes[] = 'topic-radar-page';
+    }
+    return array_unique($classes);
+}
+add_filter('body_class', 'topic_radar_page_body_class');
 
 function topic_radar_enqueue_assets() {
     $url = plugin_dir_url(__FILE__);
